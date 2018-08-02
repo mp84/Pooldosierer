@@ -1,12 +1,5 @@
 #include "includes.h"
 
-Button buttonUp(PIN_BTN_UP);
-Button buttonDown(PIN_BTN_DN);
-Button buttonOK(PIN_BTN_OK);
-Button buttonCN(PIN_BTN_CN);
-
-//CRGB leds[1];
-
 void setup() {
 
         lcd.init();
@@ -77,9 +70,6 @@ void loop() {
 
         readButtons();
         updateDisplay();
-        readPH();
-        calculatePH();
-        pumpPH();
         setFilter();
         led();
         getPressure();

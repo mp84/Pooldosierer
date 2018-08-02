@@ -10,8 +10,4 @@ extern Button buttonCN;
 
 void readButtons();
 
-void readPH();
-void calculatePH();
-void pumpPH();
-
 #endif

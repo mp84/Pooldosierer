@@ -10,7 +10,7 @@
 #include "config.h"
 #include "structs.h"
 #include "display.h"
-#include "functions.h"
+#include "buttons.h"
 #include "led.h"
 #include "filter.h"
 #include "statemachine.h"

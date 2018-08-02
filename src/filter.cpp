@@ -13,11 +13,13 @@ void setFilter() {
                 if (filter.remote == ON && digitalRead(PIN_FILTER) == OFF) {
                         filter.startTime = millis();
                         digitalWrite(PIN_FILTER, ON);
+                        lcd.backlight();
                         filter.active = TRUE;
                 };
 
                 if (filter.remote == OFF && digitalRead(PIN_FILTER) == ON) {
                         digitalWrite(PIN_FILTER, OFF);
+                        lcd.noBacklight();
                         filter.active = FALSE;
                 };
 
@@ -27,6 +29,7 @@ void setFilter() {
                 if (digitalRead(PIN_FILTER) == OFF) {
                         filter.startTime = millis();
                         digitalWrite(PIN_FILTER, ON);
+                        lcd.backlight();
                         filter.active = TRUE;
                 };
 
@@ -35,6 +38,7 @@ void setFilter() {
         case FM_PERM_OFF:
                 if (digitalRead(PIN_FILTER) == ON) {
                         digitalWrite(PIN_FILTER, OFF);
+                        lcd.noBacklight();
                         filter.active = FALSE;
                 };
 

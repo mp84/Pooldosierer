@@ -7,7 +7,7 @@ void calculateFlow() {
         if(millis() - flow.lastMillis > 1000) {
                 flow.lastMillis = millis();
 
-                flow.value = (flow.pulses * 60.00 / 7.50);
+                flow.value = (flow.pulses * 60.00 / FLOW_CALIBRATION);
                 if (flow.value > 999.0) {flow.value = 999.0; };
                 flow.pulses = 0.00;
         };
