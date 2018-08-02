@@ -4,10 +4,10 @@ ledstate_e LEDSTATE;
 
 CRGB leds[1];
 
-void led() {
+void setLED() {
 
         static unsigned long lastMillis;
-        static int i                = LED_BRIGHTNESS;
+        static int i = LED_BRIGHTNESS;
 
         switch (LEDSTATE) {
 

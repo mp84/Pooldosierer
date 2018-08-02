@@ -31,6 +31,6 @@ extern lcdMenu_e MENU;
 extern LiquidCrystal_I2C lcd;
 
 
-void updateDisplay();
+void setDisplay();
 
 #endif

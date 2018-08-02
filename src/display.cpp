@@ -9,7 +9,7 @@ unsigned long displayUpdateCycle;
 unsigned long longPressLock=0;
 
 
-void updateDisplay() {
+void setDisplay() {
 
         switch(MENU) {
 

@@ -6,6 +6,7 @@
 struct flow_t {
         float value;              //how much liquid flow do we have
         float setPoint;           //value for flowrate
+        float calibration;        //how many pulses per second fot 1l per hour
         unsigned long lastMillis;
         float pulses;
         bool status;
@@ -13,7 +14,7 @@ struct flow_t {
 
 extern flow_t flow;
 
-void calculateFlow();
+void getFlow();
 void incrementPulse();
 
 #endif

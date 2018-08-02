@@ -37,6 +37,6 @@ extern ledstate_e LEDSTATE;
 
 extern CRGB leds[];
 
-void led();
+void setLED();
 
 #endif

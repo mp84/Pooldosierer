@@ -5,7 +5,7 @@ Button buttonDown(PIN_BTN_DN);
 Button buttonOK(PIN_BTN_OK);
 Button buttonCN(PIN_BTN_CN);
 
-void readButtons() {
+void getButtons() {
         buttonUp.read();
         buttonDown.read();
         buttonOK.read();

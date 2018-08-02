@@ -11,25 +11,21 @@
 #define TYPEMATIC_DELAY 500
 
 //PH settings
-#define PIN_PH_READ 99
+#define PIN_PH_READ A1
 #define PIN_PH_PUMP 99
-#define DELAY_AFTER_START 120000UL          //delay after filter start (2 minutes)
-#define PH_DELAY 1000UL*60UL*60UL           //delay of PH dosin cycle (60 minutes)
+#define DELAY_AFTER_START 2UL*60UL*1000UL   //delay after filter start (2 minutes)
+//#define PH_DELAY 60UL*60UL*1000UL           //delay of PH dosing cycle (60 minutes)
 
 //REDOX settings
-#define PIN_CL_READ 99
+#define PIN_CL_READ A2
 #define PIN_CL_PUMP 99
-#define PH_TO_REDOX_DELAY 1000UL*60UL*10UL  //10 minutes
+#define PH_TO_REDOX_DELAY 1UL*60UL*1000UL  //1 minutes
 
 //pressure settings
 #define PIN_PRESSURE A0
-#define PRESSURE_MIN 0.3
 
 //waterflow settings
 #define PIN_FLOW 2
-#define FLOW_MIN 30
-#define FLOW_MAX 60
-#define FLOW_CALIBRATION 7.5              //how many pulses per second fot 1l per hour
 
 //filter settings
 #define PIN_FILTER 10

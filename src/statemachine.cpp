@@ -12,7 +12,7 @@ void statemachine() {
                 };
 
                 if (    digitalRead(PIN_FILTER) == ON
-                        && (pressure.value >= PRESSURE_MIN)
+                        && (pressure.value >= pressure.min)
                         && (flow.value >= flow.setPoint - 0.5)
                         && (flow.value <=flow.setPoint + 0.5)
                         && (millis() - filter.startTime > DELAY_AFTER_START)) {
@@ -55,10 +55,9 @@ void statemachine() {
 
         case FS_CHECK_PH:
 
-                if(ph.value > ph.setPoint && millis() - ph.lastRun > PH_DELAY) {
+                if(ph.value > ph.setPoint && millis() - ph.lastRun > ph.delay) {
 
-                        ph.unitsToPump = (ph.value - ph.setPoint) * 10;
-                        ph.laufzeit    = (ph.runtimePerUnit * ph.unitsToPump) * 1000UL;
+                        ph.runtime    = ((ph.value - ph.setPoint) * 10) * ph.runtimePerUnit * 1000UL;
                         FSTATUS = FS_PUMP_PH;
                 } else {
                         FSTATUS = FS_CHECK_REDOX;
@@ -75,11 +74,11 @@ void statemachine() {
                 };
 
                 if( digitalRead(PIN_PH_PUMP) == OFF ) {
-                        ph.startzeit = millis();
+                        ph.starttime = millis();
                         digitalWrite(PIN_PH_PUMP,ON);
                 };
 
-                if(millis() - ph.startzeit > ph.laufzeit) {
+                if(millis() - ph.starttime > ph.runtime) {
                         digitalWrite(PIN_PH_PUMP,OFF);
                         ph.lastRun = millis();
                         FSTATUS = FS_CHECK_FILTER;
@@ -100,27 +99,5 @@ void statemachine() {
                 LEDSTATE = FLASHING_RED;
                 FMODE = FM_PERM_OFF;
                 break;
-        }
-
-        //check and set status
-
-
-        if(filter.active == TRUE &&
-           (pressure.value >= PRESSURE_MIN) &&
-           flow.status == TRUE &&
-           millis() - ph.lastRun > PH_DELAY) {
-                ph.clearToPump = TRUE;
-        } else {
-                ph.clearToPump = FALSE;
         };
-
-        if(filter.active == TRUE &&
-           (pressure.value >= PRESSURE_MIN) &&
-           flow.status == TRUE &&
-           ph.status == TRUE &&
-           millis() - ph.lastRun > PH_TO_REDOX_DELAY) {
-                redox.clearToPump = TRUE;
-        } else {
-                redox.clearToPump = FALSE;
-        }
-}
+};

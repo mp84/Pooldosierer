@@ -8,6 +8,6 @@ extern Button buttonDown;
 extern Button buttonOK;
 extern Button buttonCN;
 
-void readButtons();
+void getButtons();
 
 #endif
