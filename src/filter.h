@@ -12,10 +12,12 @@ enum filter_mode_e {
 extern filter_mode_e FMODE;
 
 enum filter_status_e {
-        CHECKMODE,
-        FS_CHECK_FILTER,
-        STARTUP,
-        SHUTDOWN,
+        FS_CHECK,
+        FS_STARTUP,
+        FS_STARTING,
+        FS_SHUTDOWN,
+        FS_RUNNING,
+        FS_READY,
         FS_CHECK_PH,
         FS_PUMP_PH,
         FS_CHECK_REDOX,

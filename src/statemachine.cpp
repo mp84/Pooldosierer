@@ -28,15 +28,15 @@ void statemachine() {
                         };
                 };
 
-                if(FMODE == PERM_ON && digitalRead(PIN_FILTER == OFF)) {
+                if(FMODE == FM_PERM_ON && digitalRead(PIN_FILTER == OFF)) {
                         FSTATUS = FS_STARTUP;
                 };
 
-                if(FMODE == PERM_OFF && digitalRead(PIN_FILTER == ON)) {
+                if(FMODE == FM_PERM_OFF && digitalRead(PIN_FILTER == ON)) {
                         FSTATUS = FS_SHUTDOWN;
                 };
 
-                if(filter.active == TRUE) { FSTATUS = FS_RUNNING; };
+
 
 
 
@@ -56,10 +56,12 @@ void statemachine() {
 
                 if(pressure.value > pressure.min && millis() - filter.startupTime > (filter.delayAfterStartup * 60UL * 1000UL) ) {
                         filter.startTime = millis();
+                        filter.active = TRUE;
                         FSTATUS = FS_RUNNING;
                 };
 
                 if(millis() - filter.startupTime > (filter.grantedStartupTime * 60UL * 1000UL)) {
+                        filter.active = FALSE;
                         FSTATUS = FS_ERROR;
                 };
 
@@ -70,7 +72,8 @@ void statemachine() {
                 LEDSTATE = HB_YELLOW;
 
                 if(pressure.value < pressure.min) {
-                        FSTATUS = FS_STARTUP;
+                        filter.active = FALSE;
+                        FSTATUS = FS_CHECK;
                 };
 
                 if (filter.readyForDosing = TRUE) {
@@ -85,8 +88,8 @@ void statemachine() {
                 if(FMODE == FM_PERM_ON) { LEDSTATE = HB_GREEN; };
 
                 if(filter.readyForDosing = TRUE) {
-                        if(ph.value > ph.setpoint) { FSTATUS = FS_CHECK_PH; };
-                        if(ph.value <= ph.setpoint) { FSTATUS = FS_CHECK_REDOX; };
+                        if(ph.value > ph.setPoint) { FSTATUS = FS_CHECK_PH; };
+                        if(ph.value <= ph.setPoint) { FSTATUS = FS_CHECK_REDOX; };
                 } else {
                         FSTATUS = FS_RUNNING;
                 };
@@ -107,13 +110,13 @@ void statemachine() {
         case FS_AUTO_OFF:
                 lcd.noBacklight();
                 LEDSTATE = HB_YELLOW;
-                FSTATUS = FS_CHECK_FILTER;
+                FSTATUS = FS_CHECK;
                 break;
 
         case FS_PERM_OFF:
                 lcd.noBacklight();
                 LEDSTATE = HB_RED;
-                FSTATUS = FS_CHECK_FILTER;
+                FSTATUS = FS_CHECK;
                 break;
 
 
