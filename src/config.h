@@ -13,7 +13,6 @@
 //PH settings
 #define PIN_PH_READ A1
 #define PIN_PH_PUMP 99
-#define DELAY_AFTER_START 2UL*60UL*1000UL   //delay after filter start (2 minutes)
 //#define PH_DELAY 60UL*60UL*1000UL           //delay of PH dosing cycle (60 minutes)
 
 //REDOX settings

@@ -31,6 +31,9 @@ void setup() {
         flow.setPoint = 30.0;
         flow.calibration = 7.5;
 
+        filter.grantedStartupTime = 5UL;
+        filter.delayAfterStartup = 2UL;  // 2 minutes
+
         FMODE = FM_AUTO;
         //end of EEPROM values
 
@@ -84,7 +87,6 @@ void loop() {
         getFlow();
 
         setDisplay();
-        setFilter();
         setLED();
 
 

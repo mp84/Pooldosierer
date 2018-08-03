@@ -2,52 +2,116 @@
 
 void statemachine() {
 
+        if (    digitalRead(PIN_FILTER) == ON
+                && (pressure.value >= pressure.min)
+                && (flow.value >= flow.setPoint - 0.5)
+                && (flow.value <=flow.setPoint + 0.5)) {
+
+                filter.readyForDosing = TRUE;
+        } else {
+                filter.readyForDosing = FALSE;
+        };
+
+
+
         switch (FSTATUS) {
 
-        case FS_CHECK_FILTER:
+        case FS_CHECK:
 
-                if (digitalRead(PIN_FILTER) == OFF) {
-                        if (FMODE == FM_PERM_OFF) { FSTATUS = FS_PERM_OFF; };
-                        if (FMODE == FM_AUTO) { FSTATUS = FS_AUTO_OFF; };
+                if (FMODE == FM_AUTO) {
+                        if(filter.remote == TRUE && digitalRead(PIN_FILTER == OFF)) {
+                                FSTATUS = FS_STARTUP;
+                        };
+
+                        if(filter.remote == FALSE && digitalRead(PIN_FILTER == ON)) {
+                                FSTATUS = FS_SHUTDOWN;
+                        };
                 };
 
-                if (    digitalRead(PIN_FILTER) == ON
-                        && (pressure.value >= pressure.min)
-                        && (flow.value >= flow.setPoint - 0.5)
-                        && (flow.value <=flow.setPoint + 0.5)
-                        && (millis() - filter.startTime > DELAY_AFTER_START)) {
+                if(FMODE == PERM_ON && digitalRead(PIN_FILTER == OFF)) {
+                        FSTATUS = FS_STARTUP;
+                };
 
-                        filter.readyForDosing = TRUE;
+                if(FMODE == PERM_OFF && digitalRead(PIN_FILTER == ON)) {
+                        FSTATUS = FS_SHUTDOWN;
+                };
 
-                        if (FMODE == FM_AUTO)    { FSTATUS = FS_AUTO_ON; };
-                        if (FMODE == FM_PERM_ON) { FSTATUS = FS_PERM_ON; };
+                if(filter.active == TRUE) { FSTATUS = FS_RUNNING; };
+
+
+
+                break;
+
+        case FS_STARTUP:
+
+                LEDSTATE = HB_YELLOW;
+                digitalWrite(PIN_FILTER, ON);
+                lcd.backlight();
+                filter.startupTime = millis();
+                FSTATUS = FS_STARTING;
+                break;
+
+        case FS_STARTING:
+
+
+                if(pressure.value > pressure.min && millis() - filter.startupTime > (filter.delayAfterStartup * 60UL * 1000UL) ) {
+                        filter.startTime = millis();
+                        FSTATUS = FS_RUNNING;
+                };
+
+                if(millis() - filter.startupTime > (filter.grantedStartupTime * 60UL * 1000UL)) {
+                        FSTATUS = FS_ERROR;
+                };
+
+                break;
+
+        case FS_RUNNING:
+
+                LEDSTATE = HB_YELLOW;
+
+                if(pressure.value < pressure.min) {
+                        FSTATUS = FS_STARTUP;
+                };
+
+                if (filter.readyForDosing = TRUE) {
+                        FSTATUS = FS_READY;
+                };
+
+                break;
+
+        case FS_READY:
+
+                if(FMODE == FM_AUTO) { LEDSTATE = HB_BLUE; };
+                if(FMODE == FM_PERM_ON) { LEDSTATE = HB_GREEN; };
+
+                if(filter.readyForDosing = TRUE) {
+                        if(ph.value > ph.setpoint) { FSTATUS = FS_CHECK_PH; };
+                        if(ph.value <= ph.setpoint) { FSTATUS = FS_CHECK_REDOX; };
                 } else {
-                        filter.readyForDosing = FALSE;
-                        LEDSTATE = HB_YELLOW;
+                        FSTATUS = FS_RUNNING;
                 };
 
+
                 break;
 
-        case FS_AUTO_ON:
+        case FS_SHUTDOWN:
+                digitalWrite(PIN_PH_PUMP, OFF);
+                digitalWrite(PIN_CL_PUMP, OFF);
+                digitalWrite(PIN_FILTER, OFF);
+                filter.active = FALSE;
 
-                LEDSTATE = HB_BLUE;
-                FSTATUS = FS_CHECK_PH;
-                break;
+                if(FMODE = FM_AUTO) { FSTATUS = FS_AUTO_OFF; };
+                if(FMODE = FM_PERM_OFF) { FSTATUS = FS_PERM_OFF; };
 
-        case FS_PERM_ON:
-
-                LEDSTATE = HB_GREEN;
-                FSTATUS = FS_CHECK_PH;
-                break;
 
         case FS_AUTO_OFF:
-
+                lcd.noBacklight();
                 LEDSTATE = HB_YELLOW;
                 FSTATUS = FS_CHECK_FILTER;
                 break;
 
         case FS_PERM_OFF:
-
+                lcd.noBacklight();
                 LEDSTATE = HB_RED;
                 FSTATUS = FS_CHECK_FILTER;
                 break;
@@ -60,18 +124,13 @@ void statemachine() {
                         ph.runtime    = ((ph.value - ph.setPoint) * 10) * ph.runtimePerUnit * 1000UL;
                         FSTATUS = FS_PUMP_PH;
                 } else {
-                        FSTATUS = FS_CHECK_REDOX;
+                        FSTATUS = FS_READY;
                 }
                 break;
 
         case FS_PUMP_PH:
 
-                LEDSTATE = FLASHING_YELLOW;
-
-                if (filter.readyForDosing != TRUE) {
-                        digitalWrite(PIN_PH_PUMP, OFF);
-                        FSTATUS = FS_CHECK_FILTER;
-                };
+                LEDSTATE = FLASHING_BLUE;
 
                 if( digitalRead(PIN_PH_PUMP) == OFF ) {
                         ph.starttime = millis();
@@ -81,17 +140,20 @@ void statemachine() {
                 if(millis() - ph.starttime > ph.runtime) {
                         digitalWrite(PIN_PH_PUMP,OFF);
                         ph.lastRun = millis();
-                        FSTATUS = FS_CHECK_FILTER;
-                }
+                        FSTATUS = FS_CHECK;
+                };
+
+                if (filter.readyForDosing != TRUE) {
+                        digitalWrite(PIN_PH_PUMP, OFF);
+                        ph.lastRun = millis();
+                        FSTATUS = FS_CHECK;
+                };
+
                 break;
-
-
-
-
 
         case FS_PUMP_REDOX:
 
-                LEDSTATE = FLASHING_YELLOW;
+                LEDSTATE = FLASHING_BLUE;
                 break;
 
         case FS_ERROR:
