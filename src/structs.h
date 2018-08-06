@@ -12,11 +12,12 @@ struct parameters_t {
         unsigned long runtime;        //calculated end time of pump
         unsigned int runtimePerUnit;  //how long does it take to pump one "unit" of fluid
         unsigned long lastRun;        //last runtime of pump
-        //  bool clearToPump;             //are we cleared to pump
+        int calph4;                   //analog read at PH 4
+        int claph7;                   //analog read at PH 7
         bool active;                  //is pumping active?
 };
 
-extern parameters_t ph;
+
 extern parameters_t redox;
 
 #endif

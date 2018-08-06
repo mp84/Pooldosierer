@@ -8,8 +8,8 @@ struct pressure_t {
         float setPoint;           //value for overpressure
         float min;                //minimum pressure
         bool status;              //is this within our range
-        int calibration_0bar;     //analog reading for 0bar
-        int calibration_1bar;     //analog reading for 1bar
+        int cal0;                 //analog reading for 0bar
+        int cal1;                 //analog reading for 1bar
 
 };
 

@@ -4,6 +4,28 @@ lcdMenu_e MENU;
 
 LiquidCrystal_I2C lcd(LCDADDR,LCDCHARS,LCDLINES);
 
+byte arrowUp[] = {
+        0b00000,
+        0b00100,
+        0b01110,
+        0b10101,
+        0b00100,
+        0b00100,
+        0b00100,
+        0b00000
+};
+
+byte arrowDn[] = {
+        0b00000,
+        0b00100,
+        0b00100,
+        0b00100,
+        0b10101,
+        0b01110,
+        0b00100,
+        0b00000
+};
+
 unsigned long displayLastUpdate;
 unsigned long displayUpdateCycle;
 unsigned long longPressLock=0;
@@ -369,6 +391,116 @@ void setDisplay() {
                 if (buttonDown.wasPressed()) {  };
                 if (buttonOK.wasPressed())   { MENU = PHSET; };
                 if (buttonCN.wasPressed()) { MENU = STATUS; };
+                break;
+
+        case PRESSURE_CALIBRATION:
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Calibrate PRESSURE");
+                lcd.setCursor(0, 1);
+                lcd.write(1);
+                lcd.print("=0Bar ");
+                lcd.write(0);
+                lcd.print("=1Bar ");
+                lcd.setCursor(0, 2);
+                lcd.print("Analog value:");
+                lcd.setCursor(0, 3);
+                lcd.print("Setpoint:");
+                MENU = PRESSURE_CALIBRATION_UPDATE;
+                break;
+
+        case PRESSURE_CALIBRATION_UPDATE:
+
+                if(millis() - displayLastUpdate > 1000) {
+                        displayLastUpdate = millis();
+                        lcd.setCursor(14, 2);
+                        lcd.print("      ");
+                        lcd.setCursor(14, 2);
+                        lcd.print(analogRead(PIN_PRESSURE_READ));
+                        lcd.setCursor(10,3);
+                        lcd.print("          ");
+                        lcd.setCursor(10,3);
+                        lcd.print(pressure.cal0);
+                        lcd.print(" / ");
+                        lcd.print(pressure.cal1);
+                };
+
+                if(buttonUp.pressedFor(1000)) { pressure.cal1 = analogRead(PIN_PRESSURE_READ); };
+                if(buttonDown.pressedFor(1000)) { pressure.cal0 = analogRead(PIN_PRESSURE_READ); };
+
+
+                break;
+
+        case FLOW_CALIBRATION:
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Calibrate FLOW");
+                lcd.setCursor(0, 1);
+                lcd.print("pulses/s for 1L/h");
+                lcd.setCursor(0, 3);
+                lcd.print("Pulses:");
+
+                MENU = FLOW_CALIBRATION_UPDATE;
+
+                break;
+
+        case FLOW_CALIBRATION_UPDATE:
+
+                lcd.setCursor(8, 3);
+                lcd.print(flow.calibration);
+
+                if(buttonUp.wasPressed()) { flow.calibration += 0.1; };
+                if(buttonDown.wasPressed()) { flow.calibration -= 0.1; };
+
+                if (buttonUp.pressedFor(TYPEMATIC_DELAY) )  { flow.calibration += 0.1; };
+                if (buttonDown.pressedFor(TYPEMATIC_DELAY) )  { flow.calibration -= 0.1; };
+
+                if(flow.calibration < 0) { flow.calibration = 0; };
+
+                break;
+
+        case PH_CALIBRATION:
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Calibrate PH");
+                lcd.setCursor(0, 1);
+                lcd.write(1);
+                lcd.print("=PH4 ");
+                lcd.write(0);
+                lcd.print("PH7 ");
+                lcd.setCursor(0, 2);
+                lcd.print("Analog value:");
+                lcd.setCursor(0, 3);
+                lcd.print("Setpoint:");
+                MENU = PH_CALIBRATION_UPDATE;
+                break;
+
+        case PH_CALIBRATION_UPDATE:
+                if(millis() - displayLastUpdate > 1000) {
+                        displayLastUpdate = millis();
+                        lcd.setCursor(14, 2);
+                        lcd.print("      ");
+                        lcd.setCursor(14, 2);
+                        lcd.print(analogRead(PIN_PH_READ));
+                        lcd.setCursor(10,3);
+                        lcd.print("          ");
+                        lcd.setCursor(10,3);
+                        lcd.print(ph.cal4);
+                        lcd.print(" / ");
+                        lcd.print(ph.cal7);
+                };
+
+                if(buttonUp.pressedFor(1000)) { ph.cal7 = analogRead(PIN_PRESSURE_READ); };
+                if(buttonDown.pressedFor(1000)) { ph.cal4 = analogRead(PIN_PRESSURE_READ); };
+
+                break;
+
+        case REDOX_CALIBRATION:
+
+                break;
+
+        case REDOX_CALIBRATION_UPDATE:
+
                 break;
 
         default:

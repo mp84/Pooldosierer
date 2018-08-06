@@ -24,11 +24,22 @@ enum lcdMenu_e {
         FILTERMODE_UPDATE,
         LEDTEST,
         LEDTEST_UPDATE,
+        PRESSURE_CALIBRATION,
+        PRESSURE_CALIBRATION_UPDATE,
+        FLOW_CALIBRATION,
+        FLOW_CALIBRATION_UPDATE,
+        PH_CALIBRATION,
+        PH_CALIBRATION_UPDATE,
+        REDOX_CALIBRATION,
+        REDOX_CALIBRATION_UPDATE,
         INFO,
 };
 
 extern lcdMenu_e MENU;
 extern LiquidCrystal_I2C lcd;
+
+extern byte arrowUp[];
+extern byte arrowDn[];
 
 
 void setDisplay();

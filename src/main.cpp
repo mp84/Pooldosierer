@@ -9,6 +9,9 @@ void setup() {
         lcd.backlight();
         lcd.print("Initializing...");
 
+        lcd.createChar(0, arrowUp);
+        lcd.createChar(1, arrowDn);
+
         FastLED.addLeds<WS2811, PIN_LED, RGB>(leds, 1);
 
         //maybe needet as initial value
@@ -16,17 +19,19 @@ void setup() {
 
 
         //This values should come from EEPROM
-        ph.setPoint = 7.00;
+        ph.setPoint = 7.20;
         ph.runtimePerUnit = 100;
         ph.delay = 60UL * 60UL * 1000UL; //60 minutes
+        ph.cal4 = 200;
+        ph.cal7 = 512;
 
         redox.setPoint = 750.0;
         redox.runtimePerUnit = 100;
 
         pressure.setPoint = 1.00;
         pressure.min = 0.3;
-        pressure.calibration_0bar = 127;
-        pressure.calibration_1bar = 730;
+        pressure.cal0 = 127;
+        pressure.cal1 = 730;
 
         flow.setPoint = 30.0;
         flow.calibration = 7.5;
@@ -46,7 +51,8 @@ void setup() {
         pinMode(PIN_BTN_DN, INPUT_PULLUP);
         pinMode(PIN_BTN_OK, INPUT_PULLUP);
         pinMode(PIN_BTN_CN, INPUT_PULLUP);
-        pinMode(PIN_PRESSURE, INPUT);
+        pinMode(PIN_PRESSURE_READ, INPUT);
+        pinMode(PIN_PH_READ, INPUT);
         pinMode(PIN_LED, OUTPUT);
         pinMode(PIN_FLOW, INPUT);
         attachInterrupt(PIN_FLOW-2, incrementPulse, RISING);
@@ -56,7 +62,7 @@ void setup() {
         buttonOK.begin();
         buttonCN.begin();
 
-        MENU = WELCOME;
+        MENU = PH_CALIBRATION;
 
         //remove LEDstate after testing
         LEDSTATE = HB_GREEN;

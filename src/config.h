@@ -21,7 +21,7 @@
 #define PH_TO_REDOX_DELAY 1UL*60UL*1000UL  //1 minutes
 
 //pressure settings
-#define PIN_PRESSURE A0
+#define PIN_PRESSURE_READ A0
 
 //waterflow settings
 #define PIN_FLOW 2
