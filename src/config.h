@@ -3,6 +3,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define VERSION "v1.0"
+#define COMPILEDATE "2018-08-08"
+
 // button settings
 #define PIN_BTN_UP 7
 #define PIN_BTN_DN 3
@@ -16,8 +19,8 @@
 //#define PH_DELAY 60UL*60UL*1000UL           //delay of PH dosing cycle (60 minutes)
 
 //REDOX settings
-#define PIN_CL_READ A2
-#define PIN_CL_PUMP 99
+#define PIN_REDOX_READ A2
+#define PIN_REDOX_PUMP 99
 #define PH_TO_REDOX_DELAY 1UL*60UL*1000UL  //1 minutes
 
 //pressure settings

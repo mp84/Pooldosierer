@@ -99,7 +99,7 @@ void statemachine() {
 
         case FS_SHUTDOWN:
                 digitalWrite(PIN_PH_PUMP, OFF);
-                digitalWrite(PIN_CL_PUMP, OFF);
+                digitalWrite(PIN_REDOX_PUMP, OFF);
                 digitalWrite(PIN_FILTER, OFF);
                 filter.active = FALSE;
 

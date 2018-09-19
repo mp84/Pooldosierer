@@ -15,6 +15,7 @@ enum filter_status_e {
         FS_CHECK,
         FS_STARTUP,
         FS_STARTING,
+        FS_STARTING_ERROR,
         FS_SHUTDOWN,
         FS_RUNNING,
         FS_READY,

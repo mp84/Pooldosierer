@@ -22,8 +22,8 @@ void setup() {
         ph.setPoint = 7.20;
         ph.runtimePerUnit = 100;
         ph.delay = 60UL * 60UL * 1000UL; //60 minutes
-        ph.cal4 = 200;
-        ph.cal7 = 512;
+        ph.cal4 = 620;
+        ph.cal7 = 515;
 
         redox.setPoint = 750.0;
         redox.runtimePerUnit = 100;
@@ -62,7 +62,7 @@ void setup() {
         buttonOK.begin();
         buttonCN.begin();
 
-        MENU = PH_CALIBRATION;
+        MENU = WELCOME;
 
         //remove LEDstate after testing
         LEDSTATE = HB_GREEN;
@@ -84,12 +84,13 @@ void loop() {
 
                 lastMillis = millis();
 
-                ph.value = random(400,1400) / 100.0;
+                //ph.value = random(400,1400) / 100.0;
                 redox.value = random(600,900);
         };
 
         getButtons();
         getPressure();
+        getPH();
         getFlow();
 
         setDisplay();

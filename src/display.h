@@ -7,32 +7,43 @@ extern unsigned long displayLastUpdate;
 extern unsigned long displayUpdateCycle;
 
 enum lcdMenu_e {
+        // Welcome and homescreen
         WELCOME,
-        STATUS,
-        STATUS_UPDATE,
+        WELCOME_UPDATE,
+        HOME,
+        HOME_UPDATE,
+
+        //USER settings
+        FILTERMODE,
+        FILTERMODE_UPDATE,
         PHSET,
         PHSET_UPDATE,
         REDOXSET,
         REDOXSET_UPDATE,
-        FLOWSET,
-        FLOWSET_UPDATE,
         PRESSURESET,
         PRESSURESET_UPDATE,
-        MANUALMODE,
-        MANUALMODE_UPDATE,
-        FILTERMODE,
-        FILTERMODE_UPDATE,
-        LEDTEST,
-        LEDTEST_UPDATE,
-        PRESSURE_CALIBRATION,
-        PRESSURE_CALIBRATION_UPDATE,
-        FLOW_CALIBRATION,
-        FLOW_CALIBRATION_UPDATE,
+        FLOWSET,
+        FLOWSET_UPDATE,
+        INFO,
+        INFO_UPDATE,
+
+        //CALIBRATION settings
         PH_CALIBRATION,
         PH_CALIBRATION_UPDATE,
         REDOX_CALIBRATION,
         REDOX_CALIBRATION_UPDATE,
-        INFO,
+        PRESSURE_CALIBRATION,
+        PRESSURE_CALIBRATION_UPDATE,
+        FLOW_CALIBRATION,
+        FLOW_CALIBRATION_UPDATE,
+
+        //DEBUG menu
+        RAW_VALUES,
+        RAW_VALUES_UPDATE,
+        MANUALMODE,
+        MANUALMODE_UPDATE,
+        LEDTEST,
+        LEDTEST_UPDATE,
 };
 
 extern lcdMenu_e MENU;
